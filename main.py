@@ -74,7 +74,10 @@ def make_change_helper(coins, amount, cache):
             # if temp is less than min_coins then we add 1 for the coin we subtracted, plus temp, because
             # perhaps that made further recursive calls, and so we need the coins required to solve for those amounts
             # as well. Now the reason we need temp to be greater than or equal to 0 is because of the case for a no
-            # solution, since that will return a -1
+            # solution, since that will return a -1 we don't want to include that coin i made in this call into
+            # min_coins, we want to skip it, just like we would skip if i <= amount, but since it was a possible
+            # solution we did check it, only after the check did we find out it was not a solution if it returned
+            # -1, so we skip it.
             if 0 <= temp < min_coins:
                 min_coins = 1 + temp
 
