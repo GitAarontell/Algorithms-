@@ -145,6 +145,10 @@ def longest_common_subsequence_helper(str1, str2, cache, i, j):
 # implement a bottom up approach still
 
 # product sum
+# I don't know how I came up with this, but drawing it out and going through the steps that
+# I would use to solve this as a human really gave me the solution, normally though, I just think
+# up a solution in my head, but realized drawing it out like this for more complex problems is
+# super helpful in the design
 def product_sum(numbers):
     # creates cache with size of number plus 1
     cache = [-1] * (len(numbers) + 1)
@@ -159,17 +163,60 @@ def product_sum(numbers):
 
 
 def product_sum_helper(numbers, index, cache):
-
     if cache[index] != -1:
         return
     # calculates cache values that will be used in following if statement
     product_sum_helper(numbers, index - 1, cache)
     # compares multiplying current numbers value to previous numbers value vs addition while accounting
-    if numbers[index - 1] * numbers[index - 2] + cache[index - 2]\
+    if numbers[index - 1] * numbers[index - 2] + cache[index - 2] \
             > numbers[index - 1] + cache[index - 1]:
         cache[index] = numbers[index - 1] * numbers[index - 2] + cache[index - 2]
     else:
         cache[index] = numbers[index - 1] + cache[index - 1]
+
+
+# Still need to implement the rod algorithm
+
+def knapsack(n, W, items, values):
+    cache = [-1] * (W + 1)
+    cache[0] = 0
+    knapsack_helper(n, W, items, values, cache)
+    return cache[W]
+
+
+def knapsack_helper(n, W, items, values, cache):
+    if cache[W] != -1:
+        return cache[W]
+    for i in range(len(items)):
+        if W - items[i] > -1:
+            temp = values[i] + knapsack_naive(n, W - items[i], items, values)
+            if temp > cache[W]:
+                cache[W] = temp
+    return cache[W]
+
+
+def knapsack_naive(n, W, items, values):
+    max_val = 0
+    for i in range(len(items)):
+        if W - items[i] > -1:
+            temp = values[i] + knapsack_naive(n, W - items[i], items, values)
+            if temp > max_val:
+                max_val = temp
+    return max_val
+
+
+# the perfected knapsack, pretty good code, this is the one from the lecture just for reference
+def unbound_knapsack(W, n, weights, values):
+    dp = [0] * (W + 1)
+
+    for x in range(1, W + 1):
+
+        for i in range(n):
+            wi = weights[i]
+            if wi <= x:
+                dp[x] = max(dp[x], dp[x - wi] + values[i])
+
+    return dp[W]
 
 
 if __name__ == '__main__':
@@ -182,4 +229,9 @@ if __name__ == '__main__':
     # word1 = 'pozysinksi'
     # word2 = 'swozoniky'
     # print(longest_common_subsequence_naive(word1, word2))
-    print(product_sum([2, 2, 1, 3, 2, 1, 2, 2, 1]))
+    # print(product_sum([2, 2, 1, 3, 2, 1, 2, 2, 1]))
+    W = 5
+    items = [1, 2, 3, 4]
+    v = [10, 20, 5, 15]
+    print(knapsack(len(items), W, items, v))
+    print(unbound_knapsack(10, 5, [4, 9, 3, 5, 7], [10, 25, 13, 20, 8]))
