@@ -208,15 +208,33 @@ def knapsack_naive(n, W, items, values):
 # the perfected knapsack, pretty good code, this is the one from the lecture just for reference
 def unbound_knapsack(W, n, weights, values):
     dp = [0] * (W + 1)
-
     for x in range(1, W + 1):
-
         for i in range(n):
             wi = weights[i]
             if wi <= x:
                 dp[x] = max(dp[x], dp[x - wi] + values[i])
-
     return dp[W]
+
+
+# so this basically creates a multidimensional array with length W + 1(weight of the backpack + 1), and
+# width n + 1(number of items + 1). The idea is basically, start with a backpack that can carry a weight of 1, then
+# for that backpack, what is the highest value it can get with only 1 item available, then what is the highest
+# value it can get with 2 items, then 4 then 5, etc for however many items are there.
+def knapsack_0_1(W, n, weights, values):
+    dp = [[0 for x in range(n + 1)] for x in range(W + 1)]
+    for x in range(1, W + 1):
+        for i in range(1, n + 1):
+            dp[x][i] = dp[x][i - 1]
+            a = dp[x][i - 1]
+            wi = weights[i - 1]
+            vi = values[i - 1]
+            if x >= wi:
+                # the i - 1 part here is because we are now getting rid of one item, so if i was 4 for 4 items,
+                # then we would go to the backpack of weight = x - wi, and then what was the best result for a
+                # backpack of that size, and with now 3 items available.
+                dp[x][i] = max(dp[x][i], dp[x - wi][i - 1] + vi)
+
+    return dp[W][n]
 
 
 if __name__ == '__main__':
@@ -230,8 +248,8 @@ if __name__ == '__main__':
     # word2 = 'swozoniky'
     # print(longest_common_subsequence_naive(word1, word2))
     # print(product_sum([2, 2, 1, 3, 2, 1, 2, 2, 1]))
-    W = 5
-    items = [1, 2, 3, 4]
-    v = [10, 20, 5, 15]
-    print(knapsack(len(items), W, items, v))
-    print(unbound_knapsack(10, 5, [4, 9, 3, 5, 7], [10, 25, 13, 20, 8]))
+    # W = 5
+    # items = [1, 2, 3, 4]
+    # v = [10, 20, 5, 15]
+    # print(knapsack(len(items), W, items, v))
+    print(knapsack_0_1(10, 5, [4, 9, 3, 5, 7], [10, 25, 13, 20, 8]))
