@@ -237,19 +237,161 @@ def knapsack_0_1(W, n, weights, values):
     return dp[W][n]
 
 
+# --------------- Binary Tree Class --------------- #
+
+class BST:
+    def __init__(self, value):
+        self.value = value
+        self.left = None
+        self.right = None
+
+
+# --------------- Binary Tree Class --------------- #
+
+
+# --------------- Branch Sums Algorithm --------------- #
+# Returns an array of a binary trees path sums
+def branchSums(root):
+    results = []
+    sums_helper(root, 0, results)
+    return results
+
+
+def sums_helper(node, sum, results):
+    sum += node.value
+    if node.left is None and node.right is None:
+        results.append(sum)
+        return
+
+    if node.left is not None:
+        sums_helper(node.left, sum, results)
+    if node.right is not None:
+        sums_helper(node.right, sum, results)
+
+
+# --------------- Branch Sums Algorithm --------------- #
+
+
+# --------------- Node Depths Algorithm --------------- #
+# Returns the sum of all the path depths of a binary tree
+def nodeDepths(root):
+    result = [0]
+    depth_helper(root, -1, result)
+    return result[0]
+
+
+def depth_helper(node, depth, result):
+    if node is None:
+        return
+
+    r = node.value
+
+    depth += 1
+    result[0] += depth
+
+    depth_helper(node.left, depth, result)
+    depth_helper(node.right, depth, result)
+
+
+def simplified_depth(root, depth=0):
+    if root is None:
+        return 0
+    return depth + simplified_depth(root.left, depth + 1) + simplified_depth(root.right, depth + 1)
+
+
+def set_up_tree():
+    root = BST(1)
+    root.left = BST(2)
+    root.left.left = BST(4)
+    root.left.right = BST(5)
+    root.left.left.left = BST(8)
+    root.left.left.right = BST(9)
+    root.right = BST(3)
+    root.right.left = BST(6)
+    root.right.right = BST(7)
+    return root
+
+    # Driver For these methods
+    # root = set_up_tree()
+    # print(branchSums(root))
+    # print(nodeDepths(root))
+    # print(simplified_depth(root))
+
+
+# --------------- Node Depths Algorithm --------------- #
+
+
+class Node:
+    def __init__(self, name):
+        self.children = []
+        self.name = name
+
+    def addChild(self, name):
+        self.children.append(Node(name))
+        return self
+
+    def depthFirstSearch(self, array):
+        self.depth_search_helper(self, array)
+        return array
+
+    def depth_search_helper(self, node, array):
+        array.append(node.name)
+        r = node.children
+        for i in node.children:
+            # r = i.children[0]
+            node.depth_search_helper(i, array)
+
+    # Driver code
+    # root = Node('A')
+    # root.addChild('B')
+    # root.addChild('C')
+    # root.addChild('D')
+    # root.children[0].addChild('E')
+    # print(root.depthFirstSearch([]))
+
+
+# --------------- Node Depths Algorithm --------------- #
+
+# --------------- Min Query Wait Time Algorithm --------------- #
+
+def minimumWaitingTime(queries):
+    waiting_time = 0
+    total_time = 0
+    queries.sort()
+    print(queries)
+    if len(queries) > 1:
+        for i in range(0, len(queries) - 1):
+            waiting_time = waiting_time + queries[i]
+            total_time += waiting_time
+    return total_time
+
+    # Driver Code
+    # query = [3, 2, 1, 2, 6]
+    # print(minimumWaitingTime(query))
+
+
+# --------------- Min Query Wait Time Algorithm --------------- #
+
+# --------------- Class Photos Algorithm --------------- #
+def classPhotos(redShirtHeights, blueShirtHeights):
+    redShirtHeights.sort()
+    blueShirtHeights.sort()
+    red = 0
+    blue = 0
+    for i in range(len(redShirtHeights)):
+        if redShirtHeights[i] > blueShirtHeights[i]:
+            red += 1
+        elif redShirtHeights[i] < blueShirtHeights[i]:
+            blue += 1
+
+    if red == len(redShirtHeights) or blue == len(redShirtHeights):
+        return True
+    return False
+
+
+# --------------- Class Photos Algorithm --------------- #
+
+
 if __name__ == '__main__':
-    # print(fibonacci(7))
-    # print(fibonacci_bottom_up_naive(7))
-    # print(fibonacci_bottom_up(7))
-    # coin_array = [1, 2, 5]
-    # print(make_change(coin_array, 11))
-    # print(make_change(coin_array, 5))
-    # word1 = 'pozysinksi'
-    # word2 = 'swozoniky'
-    # print(longest_common_subsequence_naive(word1, word2))
-    # print(product_sum([2, 2, 1, 3, 2, 1, 2, 2, 1]))
-    # W = 5
-    # items = [1, 2, 3, 4]
-    # v = [10, 20, 5, 15]
-    # print(knapsack(len(items), W, items, v))
-    print(knapsack_0_1(10, 5, [4, 9, 3, 5, 7], [10, 25, 13, 20, 8]))
+    print('Starting Program...')
+
