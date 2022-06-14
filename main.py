@@ -1,5 +1,5 @@
 import sys
-
+import copy
 
 # --------------- Fibonacci Algorithm --------------- #
 
@@ -392,6 +392,279 @@ def classPhotos(redShirtHeights, blueShirtHeights):
 # --------------- Class Photos Algorithm --------------- #
 
 
+# --------------- Tandem Bicycle Algorithm --------------- #
+
+def tandemBicycle(redShirtSpeeds, blueShirtSpeeds, fastest):
+    blueShirtSpeeds.sort()
+
+    if fastest:
+        redShirtSpeeds.sort(reverse=True)
+    else:
+        redShirtSpeeds.sort()
+
+    top_speed = 0
+
+    for i in range(len(redShirtSpeeds)):
+        top_speed += max(redShirtSpeeds[i], blueShirtSpeeds[i])
+
+    return top_speed
+
+
+# --------------- Tandem Bicycle Algorithm --------------- #
+
+# --------------- Remove Duplicates Algorithm --------------- #
+
+class LinkedList:
+    def __init__(self, value):
+        self.value = value
+        self.next = None
+
+
+def removeDuplicatesFromLinkedList(linkedList):
+    temp_node = linkedList
+
+    while temp_node.next is not None:
+        r = temp_node.value
+        p = temp_node.next.value
+        if temp_node.value == temp_node.next.value:
+            temp_node.next = temp_node.next.next
+        else:
+            temp_node = temp_node.next
+    return linkedList
+
+    # Driver Code
+    # l = LinkedList(1)
+    # l.next = LinkedList(1)
+    # l.next.next = LinkedList(3)
+    # l.next.next.next = LinkedList(4)
+    # l.next.next.next.next = LinkedList(4)
+    # l.next.next.next.next.next = LinkedList(4)
+    # l.next.next.next.next.next.next = LinkedList(5)
+    # l.next.next.next.next.next.next.next = LinkedList(6)
+    # l.next.next.next.next.next.next.next.next = LinkedList(6)
+    # print(removeDuplicatesFromLinkedList(l))
+
+
+# --------------- Remove Duplicates Algorithm --------------- #
+
+# --------------- Fib Algorithm --------------- #
+def getNthFib(n):
+    cache = [-1] * (n + 1)
+    cache[0], cache[1] = 0, 1
+    return fib_helper(n - 1, cache)
+
+
+def fib_helper(n, cache):
+    if cache[n] != -1:
+        return cache[n]
+    cache[n] = fib_helper(n - 1, cache) + fib_helper(n - 2, cache)
+    return cache[n]
+
+
+# --------------- Fib Algorithm --------------- #
+
+# --------------- Product Sum Algorithm --------------- #
+def productSum(array):
+    return product_helper(array, 0)
+
+
+def product_helper(num, multiplier):
+    calc_sum = 0
+    if type(num) == list:
+        multiplier += 1
+        for i in range(len(num)):
+            calc_sum += product_helper(num[i], multiplier)
+        calc_sum = calc_sum * multiplier
+    else:
+        calc_sum = num
+    return calc_sum
+
+    # Driver Code
+    # r = [5, 2, [7, -1], 3, [6, [-13, 8], 4]]
+    # print(productSum(r))
+
+
+# --------------- Product Sum Algorithm --------------- #
+
+# --------------- Insertion Sort Algorithm --------------- #
+
+def insertionSort(array):
+    for i in range(1, len(array)):
+        if array[i - 1] > array[i]:
+            array[i - 1], array[i] = array[i], array[i - 1]
+            for j in reversed(range(1, i)):
+                if array[j] < array[j - 1]:
+                    array[j], array[j - 1] = array[j - 1], array[j]
+                else:
+                    break
+    return array
+
+    # Driver Code
+    # a = [8, 5, 2, 9, 5, 6, 3]
+    # print(insertionSort(a))
+
+
+# --------------- Insertion Sort Algorithm --------------- #
+
+# --------------- Selection Sort Algorithm --------------- #
+def selectionSort(array):
+    # Write your code here.
+
+    for i in range(len(array)):
+        min = array[i]
+        index = i
+        for j in range(i + 1, len(array)):
+            if array[j] < min:
+                min = array[j]
+                index = j
+        array[i], array[index] = min, array[i]
+    return array
+
+
+# --------------- Selection Sort Algorithm --------------- #
+
+# --------------- Palindrome Check Algorithm --------------- #
+def isPalindrome(string):
+    idx = len(string) - 1
+    for i in range(len(string)):
+        if string[i] != string[idx]:
+            return False
+        idx -= 1
+    return True
+
+    # Driver Code
+    # s = 'abcdcba'
+    # print(isPalindrome(s))
+
+
+# --------------- Palindrome Check Algorithm --------------- #
+
+# --------------- Caesar Cipher Algorithm --------------- #
+
+def caesarCipherEncryptor(string, key):
+    new_string = ''
+
+    for i in range(len(string)):
+        num = ord(string[i]) + (key % 26)
+
+        if num > 122:
+            num -= 26
+        new_string += chr(num)
+    return new_string
+
+    # Driver Code
+    # print(caesarCipherEncryptor('abc', 52))
+
+
+# --------------- Caesar Cipher Algorithm --------------- #
+
+# --------------- Run Length Encoding Algorithm --------------- #
+
+def runLengthEncoding(string):
+    # Write your code here.
+    new_string = ''
+    start = string[0]
+    num = 0
+    for i in string:
+
+        if i == start:
+            num += 1
+
+        else:
+            new_string += str(num) + start
+            start = i
+            num = 1
+
+        if num == 10:
+            new_string += '9' + start
+            num = 1
+
+    new_string += str(num) + start
+
+    return new_string
+
+    # Driver Code
+    # print(runLengthEncoding("AAAAAAAAAAAAABBCCCCDD"))
+
+
+# --------------- Run Length Encoding Algorithm --------------- #
+
+# --------------- Generate Document Algorithm --------------- #
+
+def generateDocument(characters, document):
+    cache = {}
+    for i in characters:
+        if i not in cache:
+            cache[i] = 1
+        else:
+            cache[i] += 1
+
+    for j in document:
+        if j not in cache or cache[j] == 0:
+            return False
+        else:
+            cache[j] -= 1
+    return True
+
+    # Driver Code
+    # print(generateDocument("aheaolabbhb", "hello"))
+
+
+# --------------- Generate Document Algorithm --------------- #
+
+# --------------- First Non-Repeating Character Algorithm --------------- #
+
+def firstNonRepeatingCharacter(string):
+    str_array = list(string)
+    visited = []
+
+    index = 0
+    while 0 != len(str_array):
+        val = str_array.pop(0)
+        if val not in str_array and val not in visited:
+            return index
+        visited.append(val)
+        index += 1
+    return -1
+
+    # Driver Code
+    # s = "faadabcbbebdf"
+    # print(firstNonRepeatingCharacter(s))
+
+
+# --------------- First Non-Repeating Character Algorithm --------------- #
+
+# --------------- Three Number Sum Algorithm --------------- #
+
+def threeNumberSum(array, targetSum):
+    result = []
+    three_sum_helper(array, targetSum, [], result, 0)
+    result.sort()
+    return result
+
+
+def three_sum_helper(array, target_sum, choices, result, index):
+    if len(choices) == 3:
+        if sum(choices) == target_sum and choices not in result:
+            temp = copy.deepcopy(choices)
+            temp.sort()
+            result.append(temp)
+        return
+
+    for i in range(index, len(array)):
+        choices.append(array[i])
+        three_sum_helper(array, target_sum, choices, result, i + 1)
+        choices.pop()
+
+    # Driver Code
+    # a = [1, 1, 1, 2, 3, 5, 3]
+    # print(threeNumberSum(a, 3))
+
+# --------------- Three Number Sum Algorithm --------------- #
+
+
 if __name__ == '__main__':
     print('Starting Program...')
-
+    # Driver Code
+    # a = [1, 1, 1, 2, 3, 5, 3]
+    # print(threeNumberSum(a, 3))
