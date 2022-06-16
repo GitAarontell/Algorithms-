@@ -1,6 +1,7 @@
 import sys
 import copy
 
+
 # --------------- Fibonacci Algorithm --------------- #
 
 # fibonacci top down
@@ -660,11 +661,214 @@ def three_sum_helper(array, target_sum, choices, result, index):
     # a = [1, 1, 1, 2, 3, 5, 3]
     # print(threeNumberSum(a, 3))
 
+
 # --------------- Three Number Sum Algorithm --------------- #
+
+
+# --------------- Smallest Difference Algorithm --------------- #
+# n * m = around n^2 time complexity
+def mySmallestDifference(arrayOne, arrayTwo):
+    min = float('infinity')
+    results = [0, 0]
+    for i in arrayOne:
+        for j in arrayTwo:
+            if abs(i - j) < min:
+                min = abs(i - j)
+                results[0], results[1] = i, j
+
+    return results
+
+
+# nlogn + mlogm time complexity
+def smallestDifference(arrayOne, arrayTwo):
+    arrayOne.sort()
+    arrayTwo.sort()
+    idx1 = 0
+    idx2 = 0
+    smallest = float('inf')
+    current = float('inf')
+    smallestPair = []
+    while idx1 < len(arrayOne) and idx2 < len(arrayTwo):
+        first = arrayOne(idx1)
+        second = arrayTwo(idx2)
+
+        if first < second:
+            current = second - first
+            idx1 += 1
+        elif second < first:
+            current = first - second
+            idx2 += 1
+        else:
+            return [first, second]
+        if smallest > current:
+            smallest = current
+            smallestPair = [first, second]
+    return smallestPair
+
+    # when looking at -1 in a and comparing to 15, since -1 is less than 15
+    # it wouldn't make sense to compare -1 to a larger number than 15 since that would result
+    # in a larger difference, so we know that we should increment idx1 since the difference of -1 and 15
+    # is known to be the smallest, and we continue this way. That is why we sort the two arrays so we know that
+    # the next value is always larger than the current ones we are looking at.
+    # a = [-1, 3, 5, 10, 20, 28]
+    # b = [15, 17, 26, 134, 135]
+
+
+# --------------- Smallest Difference Algorithm --------------- #
+
+# --------------- Move Element To End Algorithm --------------- #
+
+def moveElementToEnd(array, toMove):
+    idx1 = 0
+    idx2 = len(array) - 1
+
+    while idx1 < idx2:
+        if array[idx1] != toMove and array[idx2] == toMove:
+            idx1 += 1
+            idx2 -= 1
+        elif array[idx1] == toMove and array[idx2] == toMove:
+            idx2 -= 1
+        elif array[idx1] != toMove and array[idx2] != toMove:
+            idx1 += 1
+        else:
+            array[idx1], array[idx2] = array[idx2], array[idx1]
+    return array
+
+    # Driver Code
+    # a = [2, 1, 2, 2, 2, 3, 4, 2]
+    # b = 2
+
+
+# --------------- Move Element To End Algorithm --------------- #
+
+# --------------- Monotonic Algorithm --------------- #
+
+def isMonotonic(array):
+    increasing = True
+    decreasing = True
+
+    for i in range(len(array) - 1):
+
+        if array[i] < array[i + 1]:
+            increasing = False
+        if array[i] > array[i + 1]:
+            decreasing = False
+
+    return increasing or decreasing
+
+    # Driver Code
+    # a = [1, 1, 1, 1, 1, 1, 1]
+    # print(isMonotonic(a))
+
+
+# --------------- Monotonic Algorithm --------------- #
+
+# --------------- Spiral Traverse Algorithm --------------- #
+
+def spiralTraverse(array):
+    total_n = len(array) * len(array[0])
+    route = []
+    col = [0, len(array[0]) - 1]
+    rows = [1, len(array) - 2]
+    while total_n > len(route):
+
+        for i in range(col[0], col[1] + 1):
+            route.append(array[col[0]][i])
+
+        if total_n == len(route):
+            break
+
+        for i in range(rows[0], rows[1] + 1):
+            route.append(array[i][col[1]])
+
+        for i in reversed(range(col[0], col[1] + 1)):
+            route.append(array[rows[1] + 1][i])
+
+        if total_n == len(route):
+            break
+
+        for i in reversed(range(rows[0], rows[1] + 1)):
+            route.append(array[i][col[0]])
+
+        col[0] += 1
+        col[1] -= 1
+        rows[0] += 1
+        rows[1] -= 1
+
+    return route
+
+    # Driver Code
+    # a = [
+    #    [1, 2, 3],
+    #    [12, 13, 4],
+    #    [11, 14, 5],
+    #    [10, 15, 6],
+    #    [9, 8, 7]
+    # ]
+    # print(spiralTraverse(a))
+
+
+# --------------- Spiral Traverse Algorithm --------------- #
+
+
+# --------------- Longest Peak Algorithm --------------- #
+def longestPeak(array):
+    count = 0
+    increasing = 0
+    decreasing = 0
+    peak = 0
+
+    for i in range(len(array) - 1):
+        if array[i] < array[i + 1]:
+            if increasing == 1 and decreasing == 1 and count > peak:
+                peak = count
+                count = 1
+                increasing = 1
+                decreasing = 0
+            elif increasing == 0:
+                increasing = 1
+                count += 1
+
+            count += 1
+
+        elif array[i] > array[i + 1] and increasing == 1:
+            decreasing = 1
+            count += 1
+        else:
+            if increasing == 1 and decreasing == 1 and count > peak:
+                peak = count
+            count = 0
+            increasing = 0
+            decreasing = 0
+    if count > peak and increasing == 1 and decreasing == 1:
+        peak = count
+    return peak
+
+
+# --------------- Longest Peak Algorithm --------------- #
+
+# --------------- Array Of Products Algorithm --------------- #
+# very interesting structure, solved this with recursion by passing forward, the multiplication
+# of previous values, and passing backwards the multiplication of current and future values, I guess.
+def arrayOfProducts(array):
+    results = [0] * len(array)
+    results[0] = array_helper(array, 1, results, array[0])
+    return results
+
+
+def array_helper(array, index, results, value):
+    if index == len(array):
+        return 1
+    val = array_helper(array, index + 1, results, array[index] * value)
+    results[index] = value * val
+    return array[index] * val
+
+
+# --------------- Array Of Products Algorithm --------------- #
 
 
 if __name__ == '__main__':
     print('Starting Program...')
     # Driver Code
-    # a = [1, 1, 1, 2, 3, 5, 3]
-    # print(threeNumberSum(a, 3))
+    a = [1, 2, 3, 4, 5, 6, 10, 100, 1000]
+    print(longestPeak(a))
