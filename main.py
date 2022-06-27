@@ -2,6 +2,104 @@ import sys
 import copy
 
 
+# --------------- Binary Tree Class --------------- #
+
+class BST:
+    def __init__(self, value):
+        self.value = value
+        self.left = None
+        self.right = None
+
+    def insert(self, value):
+        temp = self
+        while True:
+            if value >= temp.value:
+                if temp.right is None:
+                    temp.right = BST(value)
+                    break
+                temp = temp.right
+            else:
+                if temp.left is None:
+                    temp.left = BST(value)
+                    break
+                temp = temp.left
+
+    def contains(self, value):
+        temp = self
+        while temp is not None:
+            if value == temp.value:
+                return True
+
+            if value > temp.value:
+                temp = temp.right
+            else:
+                temp = temp.left
+        return False
+
+    def remove(self, value):
+
+        temp = self
+        parent = None
+        while temp != None:
+            if temp.value == value:
+                # if the left and right node are null and the parent is null then set self to null
+                if temp.left == None and temp.right == None and parent == None:
+                    temp = None
+                    break
+                # else if the left and right node are null but the parent is not null then find out which side of the parent
+                # is the node that needs to be removed and remove it
+                elif temp.left == None and temp.right == None and parent != None:
+                    if parent.left == temp:
+                        parent.left = None
+                    else:
+                        parent.right = None
+                    break
+                # if the right ref is null then find parent side and set to current nodes left node
+                elif temp.left != None and temp.right == None:
+                    if parent != None:
+                        if parent.left == temp:
+                            parent.left = temp.left
+                        else:
+                            parent.right = temp.left
+                    else:
+                        self.value = temp.left.value
+                        self.right = temp.left.right
+                        self.left = temp.left.left
+
+                    break
+                # if the right node is not null then we have to go right once, then keep looping left until we reach the
+                # smallest value and replace that with the node we want to replace
+                else:
+                    self.remove_helper(temp, temp.right, temp)
+                break
+
+            parent = temp
+            if value > temp.value:
+                temp = temp.right
+            else:
+                temp = temp.left
+
+    def remove_helper(self, node_replace_val, cur_node, parent):
+        if cur_node.left != None:
+            self.remove_helper(node_replace_val, cur_node.left, cur_node)
+        else:
+            node_replace_val.value = cur_node.value
+            if node_replace_val == parent:
+                if cur_node.right != None:
+                    parent.right = cur_node.right
+                else:
+                    parent.right = None
+            else:
+                if cur_node.right == None:
+                    parent.left = None
+                else:
+                    parent.left = cur_node.right
+        return
+
+    def remove_root(self, root, new_thang):
+        root = new_thang
+# --------------- Binary Tree Class --------------- #
+
 # --------------- Fibonacci Algorithm --------------- #
 
 # fibonacci top down
@@ -236,18 +334,6 @@ def knapsack_0_1(W, n, weights, values):
                 dp[x][i] = max(dp[x][i], dp[x - wi][i - 1] + vi)
 
     return dp[W][n]
-
-
-# --------------- Binary Tree Class --------------- #
-
-class BST:
-    def __init__(self, value):
-        self.value = value
-        self.left = None
-        self.right = None
-
-
-# --------------- Binary Tree Class --------------- #
 
 
 # --------------- Branch Sums Algorithm --------------- #
@@ -866,9 +952,79 @@ def array_helper(array, index, results, value):
 
 # --------------- Array Of Products Algorithm --------------- #
 
+# --------------- First Duplicate Algorithm --------------- #
+def firstDuplicateValue(array):  # Time O(n) space O(n)
+    dict = {}
+    for i in array:
+        if i not in dict:
+            dict[i] = 1
+        else:
+            dict[i] += 1
+            if dict[i] > 1:
+                return i
+    return -1
+
+
+# you can also use sets, this seems simpler, but same time and space complexity
+def firstDuplicateValue_set_version(array):  # Time O(n) space O(n)
+    val_seen = set()
+
+    for i in array:
+        if i in val_seen:
+            return i
+        val_seen.add(i)
+    return -1
+
+
+def firstDuplicateValue_superior_version(array):  # time complexity is O(n), but space complexity is O(1)
+    for val in array:
+        ab = abs(val)
+        b = array[ab - 1]
+        if array[ab - 1] < 0:
+            return ab
+        array[ab - 1] *= -1
+    return -1
+
+
+# --------------- First Duplicate Algorithm --------------- #
+
+# --------------- Merge Overlapping Intervals Algorithm --------------- #
+def mergeOverlappingIntervals(intervals):
+    intervals.sort()
+    results = [intervals[0]]
+    index = 0
+
+    for i in range(len(intervals) - 1):
+        # partial overlap we merge
+        if intervals[i + 1][0] <= results[index][1] <= intervals[i + 1][1]:
+            results[index][1] = intervals[i + 1][1]
+        # complete overlap
+        elif results[index][0] <= intervals[i + 1][0] and results[index][1] >= intervals[i + 1][1]:
+            continue
+        else:
+            results.append(intervals[i + 1])
+            index += 1
+
+    return results
+
+
+# --------------- Merge Overlapping Intervals Algorithm --------------- #
+
 
 if __name__ == '__main__':
     print('Starting Program...')
     # Driver Code
-    a = [1, 2, 3, 4, 5, 6, 10, 100, 1000]
-    print(longestPeak(a))
+    a = [2, 1, 5, 3, 3, 2, 4]
+    tree = BST(10)
+    tree.insert(5)
+    tree.remove(10)
+    tree.contains(15)
+    # a = temp.value
+    # if temp.left != None:
+    #   b = temp.left.value
+    # if temp.right != None:
+    #   c = temp.right.value
+    # if parent != None:
+    #   d = parent.value
+    #   e = parent.right.value
+    #   f = parent.left.value

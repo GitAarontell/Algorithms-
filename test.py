@@ -4,6 +4,7 @@ from main import knapsack
 from main import branchSums
 from main import BST
 from main import spiralTraverse
+from main import mergeOverlappingIntervals
 
 
 class TestCase(unittest.TestCase):
@@ -57,6 +58,29 @@ class TestCase(unittest.TestCase):
         ]
         expected_output = [4, 2, 3, 6, 7, 8, 1, 9, 5, 10, 14, 11, 17, 13, 18, 20, 16, 15, 19, 12]
         self.assertEqual(spiralTraverse(a), expected_output)
+
+    def test_merge_overlapping_01(self):
+        a = [[1, 2],
+             [3, 5],
+             [4, 7],
+             [6, 8],
+             [9, 10]]
+        expected_output = [[1, 2], [3, 8], [9, 10]]
+        self.assertEqual(mergeOverlappingIntervals(a), expected_output)
+
+    def test_merge_overlapping_02(self):
+        a = [[1, 10],
+             [10, 20],
+             [20, 30],
+             [30, 40],
+             [40, 50],
+             [50, 60],
+             [60, 70],
+             [70, 80],
+             [80, 90],
+             [90, 100]]
+        expected_output = [[1, 100]]
+        self.assertEqual(mergeOverlappingIntervals(a), expected_output)
 
 
 if __name__ == '__main__':
